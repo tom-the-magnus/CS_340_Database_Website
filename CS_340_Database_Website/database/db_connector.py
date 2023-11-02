@@ -3,7 +3,7 @@ import MySQLdb as mariadb
 
 host = 'classmysql.engr.oregonstate.edu'  #DON'T CHANGE ME UNLESS THE INSTRUCTIONS SAY SO
 user = 'cs340_javiyaa' #CHANGE ME
-passwd = '3900' #CHANGE ME
+passwd = 'xxxx' #CHANGE ME
 db = 'cs340_javiyaa' #CHANGE ME
 
 def connect_to_database(host = host, user = user, passwd = passwd, db = db):
