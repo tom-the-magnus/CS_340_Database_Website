@@ -60,7 +60,7 @@
 </head>
 
 <body onload="browseCustomers()">
-	<h1>Customers</h1> [ Rentals | <a href="people">Customers</a> | Movies | Genres ]
+	<h1>Customers</h1> [ Rentals | <a href="customers">Customers</a> | Movies | Genres ]
 	<div id="browse">
 		<p><a href="#" onClick="newCustomer()">Add New</a> </p>
 		<table border="1" cellpadding="5">
@@ -137,7 +137,7 @@
 
 				<label for="color">age:</label>
 				<input type="text" class="form-control" id="email" name="email" pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" placeholder="{{data[0].email}}" required> </fieldset>
-				<input class="btn" type="button" value="Cancel" onClick="browsePeople()" style="margin:.5rem;"> 
+				<input class="btn" type="button" value="Cancel" onClick="browseCustomers()" style="margin:.5rem;"> 
         </form>
 	</div><!--edit-->
 </body>
