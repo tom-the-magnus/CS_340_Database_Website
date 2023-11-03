@@ -1,0 +1,119 @@
+<html>
+<!-- Adapted from the people.html UI design -->
+<head>
+	<title>Rentals</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * four DIVS: browse, insert, update, delete
+		 * this function sets one visible the others not
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
+
+	function newRental() {
+		showform('insert');
+	}
+
+	function updateRental(pid) {
+		showform('update');
+	}
+
+	function deleteRental(pid) {
+		showform('delete');
+	}
+
+	function browseRentals() {
+		showform('browse');
+	}
+
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseRentals()">
+	<h1>Rentals</h1> [ <a href="index">Homepage</a>  | <a href="rentals">Rentals</a> | <a href="customers">Customers</a>  | <a href="movies">Movies</a> | <a href="genres">Genres</a> |<a href="movie_genre_details">Movie Genre Details</a> ]
+	<div id="browse">
+	<p> Browse all Rentals. Select add new or delete to update the rentals record. </p>
+		<p><a href="#" onClick="newRental()">Add New</a> </p>
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from webapp.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="delete_rentals/{{item.rental_id}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+		<!-- form to INSERT new data into Rentals-->
+		<form id="insertRental" action="/rentals" method="post">
+			<legend><strong>Add Rental</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="make">customer_id:</label>
+				<input type="text" class="form-control" id="customer_id" name="customer_id" pattern="[0-9]+" placeholder="Customer ID" required>
+
+				<label for="model">movie_id:</label>
+				<input type="text" class="form-control" id="movie_id" name="movie_id" pattern="[0-9]+" placeholder="Movie ID" required>
+
+<label for="color">due_date:</label>
+				<input type="text" class="form-control" id="due_date" name="due_date" pattern="[0-9]{4}/[0-9]{2}/[0-9]{2}" placeholder="yyyy/mm/dd"> 
+
+
+            <!-- Create 'Add Rental' and 'Cancel' buttons -->
+			<input type="submit" value="Add Rental" name="Add_Rental" class="btn btn-primary" style="margin:.5rem;">
+			<input class="btn" type="button" value="Cancel" onClick="browseRentals()"> 
+        </form>
+	</div><!--insert-->
+</body>
+</html>
