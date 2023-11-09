@@ -5,16 +5,7 @@ from flask_mysqldb import MySQL
 from flask import request
 import os
 
-
 app = Flask(__name__)
-
-# database connection
-# Template:
-# app.config["MYSQL_HOST"] = "classmysql.engr.oregonstate.edu"
-# app.config["MYSQL_USER"] = "cs340_OSUusername"
-# app.config["MYSQL_PASSWORD"] = "XXXX" | last 4 digits of OSU id
-# app.config["MYSQL_DB"] = "cs340_OSUusername"
-# app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 # database connection info
 app.config["MYSQL_HOST"] = "classmysql.engr.oregonstate.edu"
@@ -242,62 +233,6 @@ def movie_genre_details():
 
     # Pass fetched data to the template
     return render_template("movie_genre_details.j2", details=details, movies=movies, genres=genres)
-
-'''
-# !!!!! OLD WORKING ROUTE !!!!!!!!!!!! 
-# route for Movie_Genre_Details page
-# route for Movie_Genre_Details page
-@app.route("/movie_genre_details", methods=["POST", "GET"])
-def movie_genre_details():
-    # Separate out the request methods, in this case this is for a POST
-    # insert a customer into the customer entity
-    if request.method == "POST":
-        # fire off if user presses the Add movie_genre_details button
-        if request.form.get("Add_Movie_Genre_Detail"):
-            # grab user form inputs
-            genre_id = request.form["genre_id"]
-            movie_id = request.form["movie_id"]
-
-            query = "INSERT INTO Movie_Genre_Details (genre_id, movie_id) VALUES (%s,%s)"
-            cur = mysql.connection.cursor()
-            cur.execute(query, (genre_id, movie_id))
-            mysql.connection.commit()
-
-            # redirect back to movie_genre_details page
-            return redirect("/mov~ie_genre_details")
-
-    # Grab Movie_Genre_Details data so we send it to our template to display
-    if request.method == "GET":
-        # mySQL query to grab all the customers in Customers
-        query = "SELECT movie_genre_id, movie_id, genre_id FROM Movie_Genre_Details"
-        cur = mysql.connection.cursor()
-        cur.execute(query)
-        data = cur.fetchall()
-
-
-        # render edit_customers page passing our query data and rental data to the edit_customers template
-        return render_template("movie_genre_details.j2", data=data)
-    '''
-
-    # # Grab Movie_Genre_Details data so we send it to our template to display
-    # if request.method == "GET":
-    #     # mySQL query to grab all the customers in Customers
-    #     movies_query = "SELECT movie_id, title FROM Movies" 
-    #     cur.execute(movies_query)
-    #     movies = cur.fetchall()
-
-    #     genres_query = "SELECT genre_id, genre_name FROM Genres"
-    #     cur.execute(genres_query)
-    #     genres = cur.fetchall()
-
-    #     # Fetch existing movie_genre_details    
-    #     details_query = "SELECT movie_genre_id, movie_id, genre_id FROM Movie_Genre_Details"
-    #     cur.execute(details_query)
-    #     details = cur.fetchall()
-
-    #     # Pass movies, genres, and details to the template
-    #     return render_template("movie_genre_details.j2", movies=movies, genres=genres, details=details)
-
 
 @app.route("/edit_movie_genre_details/<int:movie_genre_id>", methods=["POST", "GET"])
 def edit_movie_genre_details(movie_genre_id):
