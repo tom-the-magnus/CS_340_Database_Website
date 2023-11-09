@@ -112,33 +112,34 @@ def edit_customers(customer_id):
 # route for Movies page
 @app.route("/movies", methods=["POST", "GET"])
 def movies():
-    # Separate out the request methods, in this case this is for a POST
-    # insert a movie into the Movie entity
+    cur = mysql.connection.cursor()
+    
+    # POST
     if request.method == "POST":
-        # fire off if user presses the Add Movie button
         if request.form.get("Add_Movie"):
-            # grab user form inputs
             title = request.form["title"]
+            genre_id = request.form["genre_id"]
 
-            query = "INSERT INTO Movies (title) VALUES (%s)"
-            cur = mysql.connection.cursor()
-            cur.execute(query, (title,))
+            query1 = "INSERT INTO Movies (title) VALUES (%s)"
+            query2 = "INSERT INTO Movie_Genre_Details (movie_id, genre_id) VALUES (%s, %s)"
+            cur.execute(query1, (title,))
+            movie_id = cur.lastrowid  
+            cur.execute(query2, (movie_id, genre_id))
             mysql.connection.commit()
-
-            # redirect back to Movies page
             return redirect("/movies")
-
-    # Grab Movies data so we send it to our template to display
+        
+    # GET
     if request.method == "GET":
-        # mySQL query to grab all the movies in Movies
-        query = "SELECT movie_id, title FROM Movies"
-        cur = mysql.connection.cursor()
-        cur.execute(query)
-        data = cur.fetchall()
+        query_movies = "SELECT movie_id, title FROM Movies"
+        cur.execute(query_movies)
+        movies_data = cur.fetchall()
 
+        query_genres = "SELECT genre_id, genre_name FROM Genres"  
+        cur.execute(query_genres)
+        genres_data = cur.fetchall()
 
-        # render edit_movies page passing our query data to the edit_movies template
-        return render_template("movies.j2", data=data)
+        cur.close()
+        return render_template("movies.j2", data=movies_data, genres=genres_data)
 
 
 # route for delete functionality, deleting a movie from Movies,

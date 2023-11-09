@@ -53,56 +53,63 @@
 <body onload="browseMovies()">
 	<h1>Movies</h1> [ <a href="index">Homepage</a>  | <a href="rentals">Rentals</a> | <a href="customers">Customers</a>  | <a href="movies">Movies</a> | <a href="genres">Genres</a> |<a href="movie_genre_details">Movie Genre Details</a> ]
 	<div id="browse">
-	<p> Browse all Movies. Select add new or delete to update the collection of movies. </p>
+		<p> Browse all Movies. Select add new or delete to update the collection of movies. </p>
 		<p><a href="#" onClick="newMovie()">Add New</a> </p>
 		<table border="1" cellpadding="5">
-            <!-- Access data tuple passed from webapp.py --> 
-            {% if data %}
-			    <thead>
-				    <tr>
-					    <!-- Iterate through each key in the first entry to get the column name -->
-                        {% for key in data[0].keys() %}
-					    
-                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
-					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
-					
-                        <!-- End of this for loop -->
-                        {% endfor %} 
-                    </tr>
-
+			<!-- Access data tuple passed from webapp.py --> 
+			{% if data %}
+				<thead>
+					<tr>
+						<!-- Iterate through each key in the first entry to get the column name -->
+						{% for key in data[0].keys() %}
+							<!-- Create a <th> tag with the key inside of it, this will be our header row -->
+							<th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+						{% endfor %}
+						<!-- Removed the <th> tag for the "Genre" header -->
+					</tr>
+				</thead>
 				<tbody>
-					<!-- Now, iterate through every item in data -->{% for item in data %}
-					    <tr>
-						    <!-- Then iterate through every key in the current item dictionary -->
-                            {% for key in item.keys() %}
-
-						    <!-- Create a <td> element with the value of that key in it -->
-						    <td> {{item[key]}} </td> 
-                            {% endfor %}
-
-                            <!-- Create our edit/delete buttons -->
-						    <td><a href="delete_movies/{{item.movie_id}}" class="btn btn-default">Delete</a></td>
-
-					    </tr> 
-                        {% endfor %} 
-                {% endif %} 
-        </table>   
-	<p>&nbsp;</p>
-	</div>	<!-- browse -->
+					<!-- Now, iterate through every item in data -->
+					{% for item in data %}
+						<tr>
+							<!-- Then iterate through every key in the current item dictionary -->
+							{% for key in item.keys() %}
+								<!-- Create a <td> element with the value of that key in it -->
+								<td> {{ item[key] }} </td> 
+							{% endfor %}
+							<!-- Removed the <td> tag that displayed the genre data -->
+							<!-- Create our edit/delete buttons -->
+							<td><a href="delete_movies/{{item['movie_id']}}" class="btn btn-default">Delete</a></td>
+						</tr> 
+					{% endfor %} 
+				{% endif %} 
+			</tbody>
+		</table>   
+		<p>&nbsp;</p>
+	</div>  <!-- browse -->
 
 	<div id="insert">
 		<!-- form to INSERT new data into Movies-->
 		<form id="insertMovie" action="/movies" method="post">
 			<legend><strong>Add Movie</strong></legend>
 			<fieldset>
-                <!-- only ghost text shown -->
-				<label for="make">title:</label>
+				<!-- Input field for the title -->
+				<label for="title">Title:</label>
 				<input type="text" class="form-control" id="title" name="title" pattern="^[a-zA-Z0-9._ \t]{1,255}$" placeholder="Movie name" required>
 
-            <!-- Create 'Add Movie' and 'Cancel' buttons -->
-			<input type="submit" value="Add Movie" name="Add_Movie" class="btn btn-primary" style="margin:.5rem;">
-			<input class="btn" type="button" value="Cancel" onClick="browseMovies()"> 
-        </form>
+				<!-- Drop-down menu for genre selection -->
+				<label for="genre_id">Genre:</label>
+				<select class="form-control" id="genre_id" name="genre_id" required>
+					{% for genre in genres %}
+						<option value="{{ genre['genre_id'] }}">{{ genre['genre_name'] }}</option>
+					{% endfor %}
+				</select>
+
+				<!-- Buttons for 'Add Movie' and 'Cancel' -->
+				<input type="submit" value="Add Movie" name="Add_Movie" class="btn btn-primary" style="margin:.5rem;">
+				<input class="btn" type="button" value="Cancel" onClick="browseMovies()"> 
+			</fieldset>
+		</form>
 	</div><!--insert-->
 </body>
 </html>
