@@ -281,6 +281,7 @@ def delete_movie_genre_details(movie_genre_id):
 def rentals():
     # Separate out the request methods, in this case this is for a POST
     # insert a rental into the Rentals entity
+    cur = mysql.connection.cursor()
     if request.method == "POST":
         # fire off if user presses the Add Rental button
         if request.form.get("Add_Rental"):
@@ -300,17 +301,22 @@ def rentals():
 
     # Grab Customers data so we send it to our template to display
     if request.method == "GET":
-        # mySQL query to grab all the customers in Customers
-        query = "SELECT rental_id, customer_id, movie_id, due_date FROM Rentals"
-        cur = mysql.connection.cursor()
+
+        query = "SELECT Rentals.rental_id, Customers.first_name, Customers.last_name, Movies.title, Rentals.due_date FROM Rentals INNER JOIN Customers ON Rentals.customer_id = Customers.customer_id INNER JOIN Movies ON Rentals.movie_id = Movies.movie_id"
         cur.execute(query)
         data = cur.fetchall()
 
+        query_movies = "SELECT movie_id, title FROM Movies"
+        cur.execute(query_movies)
+        movies_data = cur.fetchall()
 
-        # render edit_customers page passing our query data and rental data to the edit_customers template
-        return render_template("rentals.j2", data=data)
+        query_customers = "SELECT customer_id, Customers.first_name, Customers.last_name FROM Customers"  
+        cur.execute(query_customers)
+        customers_data = cur.fetchall()
 
-
+        cur.close()
+        return render_template("rentals.j2", data=data, movies=movies_data, customers=customers_data)
+    
 # route for delete functionality, deleting a person from bsg_people,
 # we want to pass the 'id' value of that person on button click (see HTML) via the route
 @app.route("/delete_rentals/<int:rental_id>")

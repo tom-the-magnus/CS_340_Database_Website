@@ -99,15 +99,25 @@
 		<form id="insertRental" action="/rentals" method="post">
 			<legend><strong>Add Rental</strong></legend>
 			<fieldset>
-                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="make">customer_id:</label>
-				<input type="text" class="form-control" id="customer_id" name="customer_id" pattern="[0-9]+" placeholder="Customer ID" required>
 
-				<label for="model">movie_id:</label>
-				<input type="text" class="form-control" id="movie_id" name="movie_id" pattern="[0-9]+" placeholder="Movie ID" required>
+				<!-- Drop-down menu for movie selection -->
+				<label for="movie_id">Movie:</label>
+				<select class="form-control" id="movie_id" name="movie_id" required>
+					{% for movie in movies %}
+						<option value="{{ movie['movie_id'] }}">{{ movie['title'] }}</option>
+					{% endfor %}
+				</select>
+
+				<!-- Drop-down menu for customer selection -->
+				<label for="customer_id">Customer:</label>
+				<select class="form-control" id="customer_id" name="customer_id" required>
+					{% for customer in customers %}
+						<option value="{{ customer['customer_id'] }}">{{ customer['first_name'] }} {{ customer['last_name'] }}</option>
+					{% endfor %}
+				</select>
 
 <label for="color">due_date:</label>
-				<input type="text" class="form-control" id="due_date" name="due_date" pattern="[0-9]{4}/[0-9]{2}/[0-9]{2}" placeholder="yyyy/mm/dd"> 
+				<input type="text" class="form-control" id="due_date" name="due_date" pattern="[0-9]{4}/[0-9]{2}/[0-9]{2}" placeholder="yyyy/mm/dd" required> 
 
 
             <!-- Create 'Add Rental' and 'Cancel' buttons -->
