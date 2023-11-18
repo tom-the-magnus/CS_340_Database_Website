@@ -2,7 +2,10 @@
 
 <head>
 	<title>Edit Customer</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
 </head>
 
 <body>
@@ -56,9 +59,9 @@
                     <label for="last_name">Last name:</label>
                     <input type="text" class="form-control" id="last_name" name="last_name" pattern="[A-Za-z]+" placeholder="{{data[0].last_name}}" required>
                     
-                    <!-- Input for email -->    
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="{{data[0].email}}" required>
+                   <!-- Input for email -->    
+                   <label for="email">Email:</label>
+                   <input type="email" class="form-control" id="email" name="email" placeholder="{{data[0].email}}"> <!-- removed 'required' attribute -->
                 
                 </fieldset>
                 <input type="submit" value="Edit Customer" name="Edit_Customer" class="btn btn-primary" style="margin:.5rem;">

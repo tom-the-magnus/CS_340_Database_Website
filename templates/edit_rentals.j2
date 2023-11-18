@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>Edit Rental</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+</head>
+<body>
+    <div>
+        <h2>Editing Rental:</h2>
+        <form id="editRental" action="/edit_rentals/{{ data.rental_id }}" method="post">
+            <fieldset>
+                <input type="hidden" value="{{ data.rental_id }}" id="rental_id" name="rental_id">
+
+                <label for="customer_id">Customer ID:</label>
+                <input type="number" id="customer_id" name="customer_id" value="{{ data.customer_id }}" required>
+
+                <label for="movie_id">Movie ID:</label>
+                <input type="number" id="movie_id" name="movie_id" value="{{ data.movie_id }}" required>
+
+                <label for="due_date">Due Date:</label>
+                <input type="date" id="due_date" name="due_date" value="{{ data.due_date }}" required>
+            </fieldset>
+            <input type="submit" value="Edit Rental" name="Edit_Rental" class="btn btn-primary" style="margin:.5rem;">
+            <a href='/rentals'><input class="btn" type="button" value="Cancel"></a>
+        </form>
+    </div>
+</body>
+</html>

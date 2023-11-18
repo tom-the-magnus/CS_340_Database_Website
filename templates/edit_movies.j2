@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Edit Movie</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+</head>
+<body>
+    <div>
+        <h2>Editing Movie:</h2>
+        <form id="editMovie" action="/edit_movies/{{ data.movie_id }}" method="post">
+            <fieldset>
+                <input type="hidden" value="{{ data.movie_id }}" id="movie_id" name="movie_id">
+
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" value="{{ data.title }}" required>
+
+                <!-- Add more fields here if your movie entity has more attributes -->
+            </fieldset>
+            <input type="submit" value="Edit Movie" name="Edit_Movie" class="btn btn-primary" style="margin:.5rem;">
+            <a href='/movies'><input class="btn" type="button" value="Cancel"></a>
+        </form>
+    </div>
+</body>
+</html>

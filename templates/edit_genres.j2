@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>Edit Genre</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+</head>
+<body>
+    <div>
+        <h2>Editing Genre:</h2>
+        <form id="editGenre" action="/edit_genres/{{ data.genre_id }}" method="post">
+            <fieldset>
+                <input type="hidden" value="{{ data.genre_id }}" id="genre_id" name="genre_id">
+
+                <label for="genre_name">Genre Name:</label>
+                <input type="text" id="genre_name" name="genre_name" value="{{ data.genre_name }}" required>
+            </fieldset>
+            <input type="submit" value="Edit Genre" name="Edit_Genre" class="btn btn-primary" style="margin:.5rem;">
+            <a href='/genres'><input class="btn" type="button" value="Cancel"></a>
+        </form>
+    </div>
+</body>
+</html>

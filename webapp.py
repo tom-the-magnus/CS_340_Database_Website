@@ -99,14 +99,28 @@ def edit_customers(customer_id):
             customer_id = request.form["customer_id"]
             first_name = request.form["first_name"]
             last_name = request.form["last_name"]
-            email = request.form["email"]
+            email = request.form.get("email")
 
-            query = "UPDATE Customers SET Customers.first_name = %s, Customers.last_name = %s, Customers.email = %s WHERE Customers.customer_id = %s"
+            # query and data prep
+            query = "UPDATE Customers SET first_name = %s, last_name = %s"
+            data = [first_name, last_name]
+
+            # conditionally add email to the query
+            if email and email.strip():
+                query += ", email = %s"
+                data.append(email)
+
+            # complete query 
+            query += " WHERE customer_id = %s"
+            data.append(customer_id)
+
+            # Execute the query
             cur = mysql.connection.cursor()
-            cur.execute(query, (first_name, last_name, email, customer_id))
+            cur.execute(query, data)
             mysql.connection.commit()
+            cur.close()
 
-            # redirect back to people page after we execute the update query
+            # Redirect back to the customers page
             return redirect("/customers")
 
 # route for Movies page
@@ -141,6 +155,23 @@ def movies():
         cur.close()
         return render_template("movies.j2", data=movies_data, genres=genres_data)
 
+# Edit Movies
+def edit_movies(movie_id):
+    if request.method == "GET":
+        query = "SELECT * FROM Movies WHERE movie_id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (movie_id,))
+        data = cur.fetchone()
+        return render_template("edit_movies.j2", data=data)
+
+    if request.method == "POST":
+        if request.form.get("Edit_Movie"):
+            title = request.form["title"]
+            query = "UPDATE Movies SET title = %s WHERE movie_id = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (title, movie_id))
+            mysql.connection.commit()
+            return redirect("/movies")
 
 # route for delete functionality, deleting a movie from Movies,
 # we want to pass the 'id' value of that movie on button click (see HTML) via the route
@@ -184,6 +215,25 @@ def genres():
 
         # render edit_genres page passing our query data to the edit_genres template
         return render_template("genres.j2", data=data)
+
+# Edit Genres
+@app.route("/edit_genres/<int:genre_id>", methods=["POST", "GET"])
+def edit_genres(genre_id):
+    if request.method == "GET":
+        query = "SELECT * FROM Genres WHERE genre_id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (genre_id,))
+        data = cur.fetchone()
+        return render_template("edit_genres.j2", data=data)
+
+    if request.method == "POST":
+        if request.form.get("Edit_Genre"):
+            genre_name = request.form["genre_name"]
+            query = "UPDATE Genres SET genre_name = %s WHERE genre_id = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (genre_name, genre_id))
+            mysql.connection.commit()
+            return redirect("/genres")
 
 # route for delete functionality, deleting a genre from Genres,
 # we want to pass the 'id' value of that genre on button click (see HTML) via the route
@@ -261,6 +311,25 @@ def edit_movie_genre_details(movie_genre_id):
                                movies=movies,   
                                genres=genres)
     
+    elif request.method == "POST":
+        # Code to handle the POST request
+        # Extract the edited data from the form
+        new_movie_id = request.form['movie_id']
+        new_genre_id = request.form['genre_id']
+
+        # Update the database
+        cur = mysql.connection.cursor()
+        update_query = """
+            UPDATE Movie_Genre_Details 
+            SET movie_id = %s, genre_id = %s 
+            WHERE movie_genre_id = %s
+        """
+        cur.execute(update_query, (new_movie_id, new_genre_id, movie_genre_id))
+        mysql.connection.commit()
+
+        # Redirect to some page to indicate success or back to the edit form
+        return redirect("/movie_genre_details")
+
     return redirect("/movie_genre_details")
 
 # route for delete functionality, deleting a person from bsg_people,
@@ -316,7 +385,28 @@ def rentals():
 
         cur.close()
         return render_template("rentals.j2", data=data, movies=movies_data, customers=customers_data)
-    
+
+# Edit Rentals
+@app.route("/edit_rentals/<int:rental_id>", methods=["POST", "GET"])
+def edit_rentals(rental_id):
+    if request.method == "GET":
+        query = "SELECT * FROM Rentals WHERE rental_id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (rental_id,))
+        data = cur.fetchone()
+        return render_template("edit_rentals.j2", data=data)
+
+    if request.method == "POST":
+        if request.form.get("Edit_Rental"):
+            customer_id = request.form["customer_id"]
+            movie_id = request.form["movie_id"]
+            due_date = request.form["due_date"]
+            query = "UPDATE Rentals SET customer_id = %s, movie_id = %s, due_date = %s WHERE rental_id = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (customer_id, movie_id, due_date, rental_id))
+            mysql.connection.commit()
+            return redirect("/rentals")
+
 # route for delete functionality, deleting a person from bsg_people,
 # we want to pass the 'id' value of that person on button click (see HTML) via the route
 @app.route("/delete_rentals/<int:rental_id>")
