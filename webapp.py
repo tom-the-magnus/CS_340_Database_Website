@@ -99,7 +99,7 @@ def edit_customers(customer_id):
             customer_id = request.form["customer_id"]
             first_name = request.form["first_name"]
             last_name = request.form["last_name"]
-            email = request.form.get("email")
+            email = request.form.get("email") 
 
             # query and data prep
             query = "UPDATE Customers SET first_name = %s, last_name = %s"
